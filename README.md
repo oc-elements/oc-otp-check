@@ -1,6 +1,6 @@
 # \<oc-otp-check\>
 
-Element for payment otp check.
+Element for checking otp
 
 ## Install the Polymer-CLI
 

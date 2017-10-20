@@ -1,16 +1,13 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../oc-accounts-api/oc-accounts-api.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
 
-<!--
-`oc-otp-check`
-Element for payment otp check.
-
-@demo demo/index.html
--->
 
 <dom-module id="oc-otp-check">
   <template>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-      <style include="shop-button" is="custom-style">
+    <style include="shop-button" is="custom-style">
 
       :host {
         display: block;
@@ -18,177 +15,175 @@ Element for payment otp check.
         color: #000;
       }
 
-        .image-link {
-          outline: none;§
-        }
+      .image-link {
+        outline: none;§
+      }
 
-        .image-link > shop-image::after {
-          display: block;
-          content: '';
+      .image-link > shop-image::after {
+        display: block;
+        content: '';
+        position: absolute;
+        transition-property: opacity;
+        transition-duration: 0s;
+        transition-delay: 90ms;
+        pointer-events: none;
+        opacity: 0;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        outline: #2196F3 auto 5px;
+        outline: -moz-mac-focusring auto 5px;
+        outline: -webkit-focus-ring-color auto 5px;
+      }
+
+      .image-link:focus > shop-image::after {
+        opacity: 1;
+      }
+
+      .item {
+        display: block;
+        text-decoration: none;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .item:nth-of-type(3),
+      .item:nth-of-type(4) {
+        display: inline-block;
+        width: 50%;
+      }
+
+      shop-image {
+        position: relative;
+        height: 320px;
+        overflow: hidden;
+        --shop-image-img: {
           position: absolute;
-          transition-property: opacity;
-          transition-duration: 0s;
-          transition-delay: 90ms;
-          pointer-events: none;
-          opacity: 0;
-          top: 5px;
-          left: 5px;
-          right: 5px;
-          bottom: 5px;
-          outline: #2196F3 auto 5px;
-          outline: -moz-mac-focusring auto 5px;
-          outline: -webkit-focus-ring-color auto 5px;
-        }
+          top: 0;
+          bottom: 0;
+          left: -9999px;
+          right: -9999px;
+          max-width: none;
+        };
+      }
 
-        .image-link:focus > shop-image::after {
-          opacity: 1;
-        }
+      h2 {
+        font-size: 1.3em;
+        font-weight: 500;
+        margin: 32px 0;
+      }
 
-        .item {
-          display: block;
-          text-decoration: none;
-          text-align: center;
-          margin-bottom: 40px;
-        }
+      .item:nth-of-type(3) > h2,
+      .item:nth-of-type(4) > h2 {
+        font-size: 1.1em;
+      }
 
-        .item:nth-of-type(3),
-        .item:nth-of-type(4) {
-          display: inline-block;
-          width: 50%;
-        }
-
+      @media (max-width: 767px) {
         shop-image {
-          position: relative;
-          height: 320px;
-          overflow: hidden;
-          --shop-image-img: {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: -9999px;
-            right: -9999px;
-            max-width: none;
-          };
+          height: 240px;
         }
 
         h2 {
-          font-size: 1.3em;
-          font-weight: 500;
-          margin: 32px 0;
+          margin: 24px 0;
         }
 
-        .item:nth-of-type(3) > h2,
-        .item:nth-of-type(4) > h2 {
-          font-size: 1.1em;
+        .item:nth-of-type(3) > shop-button > a,
+        .item:nth-of-type(4) > shop-button > a {
+          padding: 8px 24px;
         }
+      }
+      p {
+        color: #000 !important;
+      }
+      .white-bg {
+        background: #fff;
+      }
+    </style>
 
-        @media (max-width: 767px) {
-          shop-image {
-            height: 240px;
-          }
+    <oc-accounts-api id="accountsApi"></oc-accounts-api>
+    <div class="container-fluid">
+      <paper-material class="white-bg">
+        <form is="iron-form"
+              method="post"
+              disable-native-validation-ui
+              novalidate
+              id="paymentForm">
+          <div class="row">
 
-          h2 {
-            margin: 24px 0;
-          }
+            <div class="col-xs-12">
 
-          .item:nth-of-type(3) > shop-button > a,
-          .item:nth-of-type(4) > shop-button > a {
-            padding: 8px 24px;
-          }
-        }
-        p {
-          color: #000 !important;
-        }
-        .white-bg {
-          background: #fff;
-        }
-      </style>
-
-
+              <h5>Verify OTP</h5>
 
 
-  <div class="container-fluid">
+              <div class="row">
 
-    <paper-material class="white-bg">
-      <form is="iron-form"
-        method="post"
-            disable-native-validation-ui
-            novalidate
-            id="paymentForm">
-    <div class="row">
-
-      <div class="col-xs-12">
-        <oc-accounts-api id="accountsApi"></oc-accounts-api>
-        <h5>Verify OTP</h5>
-
-
-        <div class="row">
-
-          <div class="col-xs-12">
-            <p>Please wait for your OTP</p>
-            <paper-input always-float-label required label="OTP Number" type="number" name="otp" value="{{otpData.otp}}"></paper-input>
+                <div class="col-xs-12">
+                  <p>Please wait for your OTP</p>
+                  <paper-input always-float-label required label="OTP Number" type="number" name="otp" value="{{otpData.otp}}"></paper-input>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-xs-23">
-        <paper-button raised class="primary" on-click="_submitForm" disabled$="{{loading}}"><a href="#">Pay</a></paper-button>
-      </div>
-    </div>
-    </form>
-
+          <div class="row">
+            <div class="col-xs-23">
+              <paper-button raised class="primary" on-click="_submitForm" disabled$="{{loading}}"><a href="#">Pay</a></paper-button>
+            </div>
+          </div>
+        </form>
   </template>
 
   <script>
-    Polymer({
+    /**
+     * `oc-otp-check`
+     * Element for checking otp
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class OcOtpCheck extends Polymer.Element {
+      static get is() { return 'oc-otp-check'; }
+      static get properties() {
+        return {
+            userId: {
+                type: Number,
+                value: OC.userId,
+            },
+            accountTypeId: Number,
+            organisationId: Number,
+            fromAccountId: Number,
+            amount: {
+                type: Number,
+                notify: true
 
-      is: 'oc-otp-check',
-
-      properties: {
-        properties: {
-          userId: {
-          type: Number,
-          value: OC.userId,
-          },
-          accountTypeId: Number,
-          organisationId: Number,
-          fromAccountId: Number,
-          amount: {
-            type: Number,
-            notify: true,
-
-          },
-
-      },
-    },
-
-    listeners: {
-      'iron-form-presubmit':'_formHandler'
-    },
-
-    _formHandler : function(e) {
-      e.preventDefault();
-      var form = this.$.paymentForm;
-
-      if (form.validate()) {
-        var formData = form.serialize(),
-                otpData = {};
-        var accountTypeId = 1;
-        otpData.accountTypeId = accountTypeId;
-        otpData.otp = formData.otp;
-
-
-        this.fire('verifyOtp', otpData);
-  }
-},
-
-      _submitForm : function(){
-        this.$.paymentForm.submit();
+            }
+        };
       }
 
-    });
 
+      _formHandler(e) {
+          e.preventDefault();
+          var form = this.$.paymentForm;
+
+          if (form.validate()) {
+              var formData = form.serialize(),
+                  otpData = {};
+              var accountTypeId = 1;
+              otpData.accountTypeId = accountTypeId;
+              otpData.otp = formData.otp;
+
+
+              this.fire('verifyOtp', otpData);
+          }
+      },
+
+      _submitForm(){
+          this.$.paymentForm.submit();
+      }
+    }
+
+    window.customElements.define(OcOtpCheck.is, OcOtpCheck);
   </script>
 </dom-module>
