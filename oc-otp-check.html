@@ -26,18 +26,18 @@
     <div class="container-fluid">
       <paper-card>
 
-        <form is="iron-form"
-              method="post"
+        <ironform is="iron-form"
               disable-native-validation-ui
               novalidate
-              id="paymentForm">
+              id="otpForm">
+         <form method="post">
           <div class="card-content">
             <div class="col-xs-12">
               <h5>Verify OTP</h5>
               <div class="row">
                 <div class="col-xs-12">
                   <p>Please wait for your OTP</p>
-                  <paper-input always-float-label required label="OTP Number" type="number" name="otp" value="{{otpData.otp}}"></paper-input>
+                  <paper-input always-float-label required label="OTP Number" type="number" name="otp" value="{{_otpData.otp}}"></paper-input>
                 </div>
               </div>
             </div>
@@ -49,8 +49,10 @@
             </div>
           </div>
         </form>
+        </ironform>
       </paper-card>
     </div>
+
   </template>
 
   <script>
@@ -68,35 +70,40 @@
         return {
             userId: {
                 type: Number,
-                value: OC.userId,
+                value: OC.userId
             },
-            accountTypeId: Number,
-            organisationId: Number,
-            fromAccountId: Number,
-            amount: {
-                type: Number,
-                notify: true
-
+            _otpData: {
+                typo: Object
             }
+            accountTypeId: Number
         };
       }
 
+        connectedCallback() {
+            super.connectedCallback();
+            const form = this.$.paymentForm;
 
-      _formHandler(e) {
-          e.preventDefault();
-          var form = this.$.paymentForm;
+            form.addEventListener('iron-form-presubmit', function (event) {
+                event.preventDefault();
 
-          if (form.validate()) {
-              var formData = form.serialize(),
-                  otpData = {};
-              var accountTypeId = 1;
-              otpData.accountTypeId = accountTypeId;
-              otpData.otp = formData.otp;
+                if (form.validate()) {
+                    var formData = form.serialize(),
+                        otpData = {};
 
+                    //TODO: need to select or pass through
+                    otpData.accountTypeId = 1;
+                    otpData.otp = formData.otp;
 
-              this.fire('verifyOtp', otpData);
-          }
-      }
+                    this.dispatchEvent(new CustomEvent('verify-otp', {
+                        bubbles: true, composed: true, detail:
+                            {otpData: otpData}
+                    }));;
+                }else{
+                    this.dispatchEvent(new CustomEvent('announce', {bubbles: true, composed: true, detail: "Failed to submit otp"}));
+                }
+            });
+        }
+
 
       _submitForm(){
           this.$.paymentForm.submit();
