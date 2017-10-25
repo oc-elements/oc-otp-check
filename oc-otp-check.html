@@ -25,31 +25,31 @@
     <oc-accounts-api id="accountsApi"></oc-accounts-api>
     <div class="container-fluid">
       <paper-card>
-
-        <ironform is="iron-form"
-              disable-native-validation-ui
-              novalidate
-              id="otpForm">
-         <form method="post">
           <div class="card-content">
             <div class="col-xs-12">
-              <h5>Verify OTP</h5>
+              <h5>Verify Payment</h5>
               <div class="row">
                 <div class="col-xs-12">
                   <p>Please wait for your OTP</p>
-                  <paper-input always-float-label required label="OTP Number" type="number" name="otp" value="{{_otpData.otp}}"></paper-input>
+                  <paper-input
+                          id="otp"
+                          always-float-label
+                          required label="OTP Number"
+                          prevent-invalid-input
+                          type="number"
+                          allowed-pattern="[0-9\-]"
+                          name="otp"
+                          value="{{_otpData.otp}}">
+                  </paper-input>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="card-actions">
             <div class="col-xs-12">
-              <paper-button raised class="primary" on-click="_submitForm" disabled$="{{loading}}"><a href="#">Pay</a></paper-button>
+              <paper-button id="submit" raised class="primary" on-click="_submit" disabled$="{{_loading}}">Submit</paper-button>
             </div>
           </div>
-        </form>
-        </ironform>
       </paper-card>
     </div>
 
@@ -65,43 +65,42 @@
      * @demo demo/index.html
      */
     class OcOtpCheck extends Polymer.Element {
-      static get is() { return 'oc-otp-check'; }
-      static get properties() {
-        return {
-            _otpData: {
-                typo: Object
-            }
+        static get is() {
+            return 'oc-otp-check';
+        }
+
+        static get properties() {
+            return {
+                _otpData: {
+                    typo: Object
+                },
+                _loading: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            };
         };
-      }
 
-      connectedCallback() {
-          super.connectedCallback();
-          const form = this.$.paymentForm;
+        _submit() {
+            if (!this.$.submit.disabled && this.$.otp.validate()) {
 
-          form.addEventListener('iron-form-presubmit', function (event) {
-              event.preventDefault();
+                //disables the button
+                this._loading = true;
 
-              if (form.validate()) {
-                  var formData = form.serialize(),
-                      otpData = {};
+                let otpData = {};
+                otpData.otp = this._otpData.otp;
 
-                  otpData.otp = formData.otp;
+                //disables the button
+                this._loading = false;
 
-                  this.dispatchEvent(new CustomEvent('verify-otp', {
-                      bubbles: true,
-                      composed: true,
-                      detail: {"otpData": otpData}
-                  }));
-              }else{
-                  this.dispatchEvent(new CustomEvent('announce', {bubbles: true, composed: true, detail: "Failed to submit otp"}));
-              }
-          });
-      }
-
-
-      _submitForm(){
-          this.$.paymentForm.submit();
-      }
+                this.dispatchEvent(new CustomEvent('verify-otp', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {"otpData": otpData}
+                }));
+            }
+        }
     }
 
     window.customElements.define(OcOtpCheck.is, OcOtpCheck);
