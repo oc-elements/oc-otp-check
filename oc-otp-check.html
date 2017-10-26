@@ -14,45 +14,53 @@
 
             :host {
                 display: block;
-                background: #BFD730;
+                background: #fff;
                 color: #000;
+                padding:15px;
             }
             paper-card {
                 width: 100%;
+                -webkit-border-radius: 6px;
+                -moz-border-radius: 6px;
+                border-radius: 6px;
             }
+
+            .add-button-row {
+                background: #ffffff;
+                margin: 15px 0;
+            }
+            .add-button {
+                width: 100%;
+                color: #fff;
+                background: #2BB673;
+            }
+
         </style>
 
         <oc-accounts-api id="accountsApi"></oc-accounts-api>
-        <div class="container-fluid">
-            <paper-card>
-                <div class="card-content">
+        <paper-card>
+            <div class="card-content col-xs-12">
+                <h5>Verify Payment</h5>
+                <div class="row">
                     <div class="col-xs-12">
-                        <h5>Verify Payment</h5>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <p>Please wait for your OTP</p>
-                                <paper-input
-                                        id="otp"
-                                        always-float-label
-                                        required label="OTP Number"
-                                        prevent-invalid-input
-                                        type="number"
-                                        allowed-pattern="[0-9\-]"
-                                        name="otp"
-                                        value="{{_otpData.otp}}">
-                                </paper-input>
-                            </div>
-                        </div>
+                        <p>Please wait for your OTP</p>
+                        <paper-input
+                                id="otp"
+                                always-float-label
+                                required label="OTP Number"
+                                prevent-invalid-input
+                                type="number"
+                                allowed-pattern="[0-9\-]"
+                                name="otp"
+                                value="{{_otpData.otp}}">
+                        </paper-input>
                     </div>
                 </div>
-                <div class="card-actions">
-                    <div class="col-xs-12">
-                        <paper-button id="submit" raised class="primary" on-click="_submit" disabled$="{{_loading}}">Submit</paper-button>
-                    </div>
-                </div>
-            </paper-card>
-        </div>
-
+            </div>
+            <div class="col-xs-12 add-button-row">
+                <paper-button id="submit"  class="primary add-button" on-click="_submit" disabled$="{{_loading}}">Submit</paper-button>
+            </div>
+        </paper-card>
     </template>
 
     <script>
