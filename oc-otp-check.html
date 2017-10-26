@@ -8,101 +8,102 @@
 
 
 <dom-module id="oc-otp-check">
-  <template>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <style is="custom-style">
+    <template>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <style is="custom-style">
 
-      :host {
-        display: block;
-        background: #BFD730;
-        color: #000;
-      }
-      paper-card {
-        width: 100%;
-      }
-    </style>
+            :host {
+                display: block;
+                background: #BFD730;
+                color: #000;
+            }
+            paper-card {
+                width: 100%;
+            }
+        </style>
 
-    <oc-accounts-api id="accountsApi"></oc-accounts-api>
-    <div class="container-fluid">
-      <paper-card>
-          <div class="card-content">
-            <div class="col-xs-12">
-              <h5>Verify Payment</h5>
-              <div class="row">
-                <div class="col-xs-12">
-                  <p>Please wait for your OTP</p>
-                  <paper-input
-                          id="otp"
-                          always-float-label
-                          required label="OTP Number"
-                          prevent-invalid-input
-                          type="number"
-                          allowed-pattern="[0-9\-]"
-                          name="otp"
-                          value="{{_otpData.otp}}">
-                  </paper-input>
+        <oc-accounts-api id="accountsApi"></oc-accounts-api>
+        <div class="container-fluid">
+            <paper-card>
+                <div class="card-content">
+                    <div class="col-xs-12">
+                        <h5>Verify Payment</h5>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p>Please wait for your OTP</p>
+                                <paper-input
+                                        id="otp"
+                                        always-float-label
+                                        required label="OTP Number"
+                                        prevent-invalid-input
+                                        type="number"
+                                        allowed-pattern="[0-9\-]"
+                                        name="otp"
+                                        value="{{_otpData.otp}}">
+                                </paper-input>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-actions">
-            <div class="col-xs-12">
-              <paper-button id="submit" raised class="primary" on-click="_submit" disabled$="{{_loading}}">Submit</paper-button>
-            </div>
-          </div>
-      </paper-card>
-    </div>
+                <div class="card-actions">
+                    <div class="col-xs-12">
+                        <paper-button id="submit" raised class="primary" on-click="_submit" disabled$="{{_loading}}">Submit</paper-button>
+                    </div>
+                </div>
+            </paper-card>
+        </div>
 
-  </template>
+    </template>
 
-  <script>
-    /**
-     * `oc-otp-check`
-     * Element for checking otp
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class OcOtpCheck extends Polymer.Element {
-        static get is() {
-            return 'oc-otp-check';
-        }
+    <script>
+        /**
+         * `oc-otp-check`
+         * Element for checking otp
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class OcOtpCheck extends Polymer.Element {
+            static get is() {
+                return 'oc-otp-check';
+            }
 
-        static get properties() {
-            return {
-                _otpData: {
-                    typo: Object
-                },
-                _loading: {
-                    type: Boolean,
-                    value: false,
-                    notify: true
-                }
+            static get properties() {
+                return {
+                    _otpData: {
+                        typo: Object,
+                        value: {}
+                    },
+                    _loading: {
+                        type: Boolean,
+                        value: false,
+                        notify: true
+                    }
+                };
             };
-        };
 
-        _submit() {
-            if (!this.$.submit.disabled && this.$.otp.validate()) {
+            _submit() {
+                if (!this.$.submit.disabled && this.$.otp.validate()) {
 
-                //disables the button
-                this._loading = true;
+                    //disables the button
+                    this._loading = true;
 
-                let otpData = {};
-                otpData.otp = this._otpData.otp;
+                    let otpData = {};
+                    otpData.otp = this._otpData.otp;
 
-                //disables the button
-                this._loading = false;
+                    //disables the button
+                    this._loading = false;
 
-                this.dispatchEvent(new CustomEvent('verify-otp', {
-                    bubbles: true,
-                    composed: true,
-                    detail: {"otpData": otpData}
-                }));
+                    this.dispatchEvent(new CustomEvent('verify-otp', {
+                        bubbles: true,
+                        composed: true,
+                        detail: {"otpData": otpData}
+                    }));
+                }
             }
         }
-    }
 
-    window.customElements.define(OcOtpCheck.is, OcOtpCheck);
-  </script>
+        window.customElements.define(OcOtpCheck.is, OcOtpCheck);
+    </script>
 </dom-module>
