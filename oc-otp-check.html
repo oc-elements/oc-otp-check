@@ -112,7 +112,8 @@
 
                     //disables the button
                     this._loading = false;
-
+			
+		    this.$.otp.value = "";
                     this.dispatchEvent(new CustomEvent('verify-otp', {
                         bubbles: true,
                         composed: true,
