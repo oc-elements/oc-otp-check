@@ -91,6 +91,15 @@
                     }
                 };
             };
+            
+            ready() {
+            	super.ready();
+				document.querySelector('shop-app').addEventListener('back', (e) => this._onBack());
+			}
+
+			_onBack() {
+				history.back();
+			}
 
             _submit() {
                 if (!this.$.submit.disabled && this.$.otp.validate()) {
