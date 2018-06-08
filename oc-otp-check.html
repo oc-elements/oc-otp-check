@@ -15,8 +15,8 @@
 
             :host {
                 display: block;
-                background: #fff;
-                color: #000;
+                background: var(--app-primary-color);
+                color: #fff;
                 padding:15px;
             }
             paper-card {
@@ -26,10 +26,6 @@
                 border-radius: 6px;
             }
 
-            .add-button-row {
-                background: #ffffff;
-                margin: 15px 0;
-            }
             .add-button {
                 width: 100%;
                 color: #000;
@@ -59,7 +55,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 add-button-row">
+            <div class="col-xs-12">
                 <paper-button id="submit"  class="primary-button" on-click="_submit" disabled$="{{_loading}}">Submit</paper-button>
             </div>
         </paper-card>
@@ -92,16 +88,16 @@
                     }
                 };
             };
-            
-            ready() {
-            	super.ready();
-				document.querySelector('shop-app').addEventListener('back', (e) => this._onBack());
-			}
 
-			_onBack() {
-				this.$.otp.value = "";
-				history.back();
-			}
+            ready() {
+                super.ready();
+                document.querySelector('shop-app').addEventListener('back', (e) => this._onBack());
+            }
+
+            _onBack() {
+                this.$.otp.value = "";
+                history.back();
+            }
 
             _submit() {
                 if (!this.$.submit.disabled && this.$.otp.validate()) {
@@ -114,8 +110,8 @@
 
                     //disables the button
                     this._loading = false;
-			
-		    this.$.otp.value = "";
+
+                    this.$.otp.value = "";
                     this.dispatchEvent(new CustomEvent('verify-otp', {
                         bubbles: true,
                         composed: true,
